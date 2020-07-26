@@ -1,0 +1,257 @@
+C:\Users\Rupesh Regmi>docker run --name rupesh1 -e POSTGRES_PASSWORD=mypassword -p 5432:5432 -d postgres
+4c1d43bc1b0815531008087b4194ff87e10463d01e659464f98d2ab1a0d16e55
+
+C:\Users\Rupesh Regmi>docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                    NAMES
+4c1d43bc1b08        postgres            "docker-entrypoint.s…"   8 minutes ago       Up 8 minutes        0.0.0.0:5432->5432/tcp   rupesh1
+
+C:\Users\Rupesh Regmi>docker exec -it 4c1d bash
+root@4c1d43bc1b08:/# psql -U postgres -p 5432 -h localhost
+psql (12.2 (Debian 12.2-1.pgdg100+1))
+Type "help" for help.
+
+postgres=# create database libraryMS;
+CREATE DATABASE
+postgres=# \l
+                                 List of databases
+   Name    |  Owner   | Encoding |  Collate   |   Ctype    |   Access privileges
+-----------+----------+----------+------------+------------+-----------------------
+ libraryms | postgres | UTF8     | en_US.utf8 | en_US.utf8 |
+ postgres  | postgres | UTF8     | en_US.utf8 | en_US.utf8 |
+ template0 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
+           |          |          |            |            | postgres=CTc/postgres
+ template1 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
+           |          |          |            |            | postgres=CTc/postgres
+(4 rows)
+
+postgres=# \c libraryms
+You are now connected to database "libraryms" as user "postgres".
+libraryms=# create table books(id int,name varchar(30),author varchar(30));
+CREATE TABLE
+                  
+libraryms=# create table users(u_id int,name varchar(30),book_taken varchar(30));
+CREATE TABLE
+libraryms=# \dt
+         List of relations
+ Schema | Name  | Type  |  Owner
+--------+-------+-------+----------
+ public | books | table | postgres
+ public | users | table | postgres
+(2 rows)
+
+
+libraryms=# \d books
+                      Table "public.books"
+ Column |         Type          | Collation | Nullable | Default
+--------+-----------------------+-----------+----------+---------
+ id     | integer               |           |          |
+ name   | character varying(30) |           |          |
+ author | character varying(30) |           |          |
+
+libraryms=# insert into books(id,name,author) values(1,'MyLife','Rupesh');
+INSERT 0 1
+libraryms=# insert into books(id,name,author) values(1,'MyLife2','Rupesh');
+INSERT 0 1
+libraryms=# insert into books(id,name,author) values(1,'MyLife1','Rupesh');
+
+libraryms=# select * from books;
+ id |  name   | author
+----+---------+--------
+  1 | MyLife  | Rupesh
+  1 | MyLife2 | Rupesh
+(2 rows)
+              
+libraryms=# insert into books(id,name,author) values(2,'HisLife','Not ME');
+INSERT 0 1
+libraryms=# insert into books(id,name,author) values(3,'HerLife','Not Him');
+INSERT 0 1
+libraryms=# select * from books;
+ id |  name   | author
+----+---------+---------
+  1 | MyLife  | Rupesh
+  1 | MyLife2 | Rupesh
+  2 | HisLife | Not ME
+  3 | HerLife | Not Him
+(4 rows)
+                                        ^
+libraryms=# insert into users(u_id,name,book_taken) values(1,'Rupesh','HisLife');
+INSERT 0 1
+libraryms=# insert into users(u_id,name,book_taken) values(2,'Sudip','HerLife');
+INSERT 0 1
+libraryms=# insert into users(u_id,name,book_taken) values(3,'Roshan','HerLife');
+INSERT 0 1
+libraryms=# insert into users(u_id,name,book_taken) values(4,'Kapil','MyLife');
+INSERT 0 1
+
+libraryms=# select * from users;
+ u_id |  name  | book_taken
+------+--------+------------
+    1 | Rupesh | HisLife
+    2 | Sudip  | HerLife
+    3 | Roshan | HerLife
+    4 | Kapil  | MyLife
+(4 rows)
+
+libraryms=# update books set cost=500 where id=1;
+UPDATE 2
+libraryms=# \d books
+
+libraryms=# select * from books;
+ id |  name   | author  | cost
+----+---------+---------+------
+  2 | HisLife | Not ME  |
+  3 | HerLife | Not Him |
+  1 | MyLife  | Rupesh  |  500
+  1 | MyLife2 | Rupesh  |  500
+(4 rows)
+
+libraryms=# update books set cost=600 where id=3;
+UPDATE 1
+libraryms=# update books set cost=1000 where id=2;
+UPDATE 1
+
+libraryms=# select * from users;
+ u_id |  name  | book_taken | user_type
+------+--------+------------+-----------
+    1 | Rupesh | HisLife    |
+    2 | Sudip  | HerLife    |
+    3 | Roshan | HerLife    |
+    4 | Kapil  | MyLife     |
+(4 rows)
+
+libraryms=# update users set user_type='teacher' where u_id=1;
+UPDATE 1
+libraryms=# update users set user_type='student' where u_id=2;
+UPDATE 1
+libraryms=# update users set user_type='teacher' where u_id=4;
+UPDATE 1
+libraryms=# update users set user_type='student' where u_id=3;
+UPDATE 1
+libraryms=# select * from users;
+ u_id |  name  | book_taken | user_type
+------+--------+------------+-----------
+    1 | Rupesh | HisLife    | teacher
+    2 | Sudip  | HerLife    | student
+    4 | Kapil  | MyLife     | teacher
+    3 | Roshan | HerLife    | student
+(4 rows)
+
+libraryms=# delete from books where id=1;
+DELETE 2
+libraryms=# select * from books;
+ id |  name   | author  | cost
+----+---------+---------+------
+  3 | HerLife | Not Him |  600
+  2 | HisLife | Not ME  | 1000
+(2 rows)
+
+                                         ^
+libraryms=# insert into books(id,name,author,cost) values(1,'MyLife','Rupesh',1200);
+INSERT 0 1
+libraryms=# insert into books(id,name,author,cost) values(5,'Hello World','Ram',100);
+INSERT 0 1
+libraryms=# insert into books(id,name,author,cost) values(6,'Digital World','Shyam',1000);
+INSERT 0 1                    ^
+libraryms=# insert into users(u_id,name,book_taken,user_type) values(5,'Steve Jobs','Digital World','Teacher');
+INSERT 0 1
+libraryms=# insert into users(u_id,name,book_taken,user_type) values(6,'Bill Gates','Hello world','Teacher');
+INSERT 0 1
+libraryms=# insert into users(u_id,name,book_taken,user_type) values(7,'Elon Musk','Hello world','student');
+INSERT 0 1
+libraryms=# insert into users(u_id,name,book_taken,user_type) values(8,'Newton','MyLife','student');
+INSERT 0 1
+libraryms=# select * from books;
+ id |     name      | author  | cost
+----+---------------+---------+------
+  3 | HerLife       | Not Him |  600
+  2 | HisLife       | Not ME  | 1000
+  1 | MyLife        | Rupesh  | 1200
+  5 | Hello World   | Ram     |  100
+  6 | Digital World | Shyam   | 1000
+(5 rows)
+
+libraryms=# select * from users;
+ u_id |    name    |  book_taken   | user_type
+------+------------+---------------+-----------
+    1 | Rupesh     | HisLife       | teacher
+    2 | Sudip      | HerLife       | student
+    4 | Kapil      | MyLife        | teacher
+    3 | Roshan     | HerLife       | student
+    5 | Steve Jobs | Digital World | Teacher
+    6 | Bill Gates | Hello world   | Teacher
+    7 | Elon Musk  | Hello world   | student
+    8 | Newton     | MyLife        | student
+(8 rows)
+
+libraryms=# select * from users where user_type='student';
+ u_id |   name    | book_taken  | user_type
+------+-----------+-------------+-----------
+    2 | Sudip     | HerLife     | student
+    3 | Roshan    | HerLife     | student
+    7 | Elon Musk | Hello world | student
+    8 | Newton    | MyLife      | student
+(4 rows)
+
+libraryms=# select name,book_taken from users where user_type='student';
+   name    | book_taken
+-----------+-------------
+ Sudip     | HerLife
+ Roshan    | HerLife
+ Elon Musk | Hello world
+ Newton    | MyLife
+(4 rows)
+
+libraryms=# select name,book_taken from users where user_type='teacher';
+  name  | book_taken
+--------+------------
+ Rupesh | HisLife
+ Kapil  | MyLife
+(2 rows)
+
+libraryms=# update users set user_type='teacher' where u_id=5;
+UPDATE 1
+libraryms=# update users set user_type='teacher' where u_id=6;
+UPDATE 1
+libraryms=# select name,book_taken from users where user_type='student';
+   name    | book_taken
+-----------+-------------
+ Sudip     | HerLife
+ Roshan    | HerLife
+ Elon Musk | Hello world
+ Newton    | MyLife
+(4 rows)
+
+libraryms=# select name,book_taken from users where user_type='teacher';
+    name    |  book_taken
+------------+---------------
+ Rupesh     | HisLife
+ Kapil      | MyLife
+ Steve Jobs | Digital World
+ Bill Gates | Hello world
+(4 rows)
+
+libraryms=# select sum(cost) from books;
+ sum
+------
+ 3900
+(1 row)
+
+libraryms=# select max(cost) from books;
+ max
+------
+ 1200
+(1 row)
+
+
+libraryms=# select max(cost) AS MAXPRICE from books;
+ maxprice
+----------
+     1200
+(1 row)
+
+libraryms=#
+
+
+
+Groupby code for SQL:
+select SUM(salary), teacher_address from test_teacher group by teacher_address;

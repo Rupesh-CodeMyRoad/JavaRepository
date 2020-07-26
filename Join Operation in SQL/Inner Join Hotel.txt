@@ -1,0 +1,61 @@
+postgres=# create database Hotel;
+CREATE DATABASE
+postgres=# \c hotel
+You are now connected to database "hotel" as user "postgres".
+hotel=# create table Hotel(id serial primary key,name varchar(30),address varchar(30),hotel_type int);
+CREATE TABLE
+hotel=# create table hotel_type(id int,type_name varchar(30));
+CREATE TABLE
+hotel=# insert into Hotel(name,address,hotel_type) values('Grande Hotel','Gaushala',1),('Pokhara Hotel','Pokhara',2),('KTM Hotel And Spa','Koteshowr',3);
+INSERT 0 3
+hotel=# insert into Hotel(name,address,hotel_type) values('Taj Hotel','India',1),('Dubai Hotel','Dubai',2),('RR Hotel','Chitwan',3);
+INSERT 0 3
+hotel=# insert into hotel_type (1,'5 Star'),(2,'4 Star'),(3,'3 Star');
+ERROR:  syntax error at or near "1"
+LINE 1: insert into hotel_type (1,'5 Star'),(2,'4 Star'),(3,'3 Star'...
+                                ^
+hotel=# insert into hotel_type values(1,'5 Star'),(2,'4 Star'),(3,'3 Star');
+INSERT 0 3
+hotel=# select * from Hotel;
+ id |       name        |  address  | hotel_type
+----+-------------------+-----------+------------
+  1 | Grande Hotel      | Gaushala  |          1
+  2 | Pokhara Hotel     | Pokhara   |          2
+  3 | KTM Hotel And Spa | Koteshowr |          3
+  4 | Taj Hotel         | India     |          1
+  5 | Dubai Hotel       | Dubai     |          2
+  6 | RR Hotel          | Chitwan   |          3
+(6 rows)
+
+hotel=# select * from Hotel_TYPE;
+ id | type_name
+----+-----------
+  1 | 5 Star
+  2 | 4 Star
+  3 | 3 Star
+(3 rows)
+
+hotel=# select h.name,h.address,ht.type_name from Hotel h INNER JOIN hotel_type ht on h.hotel_type=ht.id;
+       name        |  address  | type_name
+-------------------+-----------+-----------
+ Taj Hotel         | India     | 5 Star
+ Grande Hotel      | Gaushala  | 5 Star
+ Dubai Hotel       | Dubai     | 4 Star
+ Pokhara Hotel     | Pokhara   | 4 Star
+ RR Hotel          | Chitwan   | 3 Star
+ KTM Hotel And Spa | Koteshowr | 3 Star
+(6 rows)
+
+hotel=# select h.name,h.address,ht.type_name from Hotel h INNER JOIN hotel_type ht on h.hotel_type=ht.id where ht.id=1;
+     name     | address  | type_name
+--------------+----------+-----------
+ Grande Hotel | Gaushala | 5 Star
+ Taj Hotel    | India    | 5 Star
+(2 rows)
+
+hotel=# select h.name,h.address,ht.type_name from Hotel h INNER JOIN hotel_type ht on h.hotel_type=ht.id where h.hotel_type=1;
+     name     | address  | type_name
+--------------+----------+-----------
+ Grande Hotel | Gaushala | 5 Star
+ Taj Hotel    | India    | 5 Star
+(2 rows)

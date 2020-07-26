@@ -1,0 +1,167 @@
+Java.lang packages:
+-------------------
+There are few classes that we use like
+System:
+Systen.out.println(---)
+System is a class
+Also for classes like scanner and BigInteger that needs to be imported like
+import java.math.BigInteger
+import java.util.Scanner
+
+Some classes like wrapper classes ( Integer , float, String, System ) etc are not specially
+imported Because they fall under java.lang package And java.lang package are by
+default imported.
+
+
+Examples:
+Math – Set 1, Set 2: The class Math contains methods for performing basic numeric operations
+                     such as the elementary exponential, logarithm, square root, and 
+                     trigonometric functions.
+Number: The abstract class Number is the superclass of classes BigDecimal, BigInteger, 
+        Byte, Double, Float, Integer, Long, and Short.
+Object: Class Object is the root of the class hierarchy.
+Double: The Double class wraps a value of the primitive type double in an object.
+Enum: This is the common base class of all Java language enumeration types.
+Float: The Float class wraps a value of primitive type float in an object.
+InheritableThreadLocal: This class extends ThreadLocal to provide inheritance of values from parent
+                        thread to child thread: when a child thread is created, the child
+                        receives initial values for all inheritable thread-local variables
+                        for which the parent has values.
+
+
+Class And Object :
+----------------
+Class :  Simply a blueprint of concept or real world object.
+Object : Instance of a class
+         Can access all member attributes and methods
+         Object has its memory:
+ 		In 32-bit system : 8 bit
+		In 64-bit system : 12 bit
+	 Object is created in HEAP AREA of Runtime Data Area of java.
+
+
+For: Student ram = new Student();
+     Student ram : Object is created but memory is not allocated
+     new : allocates memory in Heap Area
+     Student() : Calls blank constructor/default constructor.
+
+
+Methods:
+-------
+Method banauni
+Object banauni
+Object bata method call garni
+
+Costructor:
+----------
+-It is a method.
+-Name same as class name.
+-Constructor is called when object is created.
+-One object can only call one constructor
+
+
+Types of constructor:
+---------------------
+1) Blank Constructor - does not take any parameter.
+2) Parameterized Constructor - takes parameter.
+3) Default Constructor - auto made if constructor is not present.
+
+Access modifiers:
+-----------------
+-Public:
+	It is accessible to any class with the object.
+	We should use the keyword public.
+	Has the widest scope can be : Accessed within the class, within the package and with any other packages.
+
+-Private:
+	It is not accessible to any class.
+	Only within the class.
+
+-Protected:
+	Allows the class itself , subclassess and all classes in the same packages to call the method.
+	Default + (can be access through sub-class by using extends or import / Like in Inheritance )	
+
+-Default: 
+	If nothing is specified then by default it is set as DEFAULT modifier.
+	Cannot be accessed outside the packages.
+	Can be accessed within the class or package.
+
+Scope:
+------
+
+1) Method scope :
+	Example :class Test
+		{
+		public void sum(){
+		int a = 10; ---------Method scope
+		}
+		main(){
+		test t = new test();
+		System.out.println(a)-----Cannot be done as 'a' is method scope and can only be used within the method sum().
+
+2) Class scope : These variables must be declared inside class (outside any function). They can be directly accessed anywhere in class.
+		Example : public class Test
+				{
+    				// All variables defined directly inside a class 
+    				// are member variables
+    				int a;
+    				private String b
+    				void method1() {....}
+    				int method2() {....}
+    				char c;
+				}
+
+3) Private scope : ---for loop
+		   ---for each loop
+		example : for(int i =0; i < 10; i++)
+				{
+				 // here 'i' is private scope	
+				}
+
+Java Beans:
+-----------
+classes that encapsulate many objects into a single object ( the bean)
+
+File Handle :
+-------------
+createNewFile()
+isFile()
+canWrite()
+canRead()
+mkdir()
+isDir()
+
+Connecting with psql
+---------------------
+
+*psql -u <postgres-user> -p<port> -h<hostname>
+example : psql -U postgres -p 5432 -h localhost
+
+Database:
+----------
+
+Join Operation :
+
+
+1) Inner Join: select * from teacher t INNER JOIN Teacher_Type tt on t.teacher_type = tt.id;
+	       select t.name,t.address,t.salary,tt.type_name from teacher t INNER JOIN Teacher_Type tt on t.teacher_type = tt.id;
+2) Left Join:
+3) Right Join:
+4) Full Join:
+
+Association:-
+-------------
+How two objects are related ?
+One to One ---2 table
+One to Many ---2 table
+Many to One ---2 table
+Many to Many --- 3 table
+
+Example:
+Hotel (Many) <---------> Hotel_type (One)
+Appartment ( Many) <----> Room (Many)
+Car (Many) <----------> Engine ( One)
+
+For Docker Backup:
+-------------------
+docker run -e POSTGRES_PASSWORD=mypassword -p 5432:5432 -v /D/postgresbackup:/var/lib/postgresql/data -d postgres

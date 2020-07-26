@@ -1,0 +1,47 @@
+postgres=# create database school;
+CREATE DATABASE
+postgres=# \c school
+You are now connected to database "school" as user "postgres".
+school=# create table users(userid serial primary key,username varchar(30),password varchar(30),active int);
+CREATE TABLE
+school=# create table roles(roleid serial primary key,rolename varchar(30));
+CREATE TABLE
+school=# insert into users(username,password,active) values('Rupesh','rupa',1),('Nabin','nab',1),('Krishna','krish',1);
+INSERT 0 3
+school=# insert into roles(rolename) values('Admin'),('Content Writer'),('Receptionist');
+INSERT 0 3
+
+school=# select * from users;
+ userid | username | password | active
+--------+----------+----------+--------
+      1 | Rupesh   | rupa     |      1
+      2 | Nabin    | nab      |      1
+      3 | Krishna  | krish    |      1
+(3 rows)
+
+school=# select * from roles;
+ roleid |    rolename
+--------+----------------
+      1 | Admin
+      2 | Content Writer
+      3 | Receptionist
+(3 rows)
+
+school=# select * from userrole;
+ urid | userid | roleid
+------+--------+--------
+    1 |      1 |      1
+    2 |      1 |      2
+    3 |      2 |      3
+    4 |      3 |      3
+(4 rows)
+
+                                                             
+school=# select u.username,r.rolename from users u inner join userrole ur on u.userid=ur.userid inner join roles r on r.roleid=ur.roleid;
+ username |    rolename
+----------+----------------
+ Rupesh   | Admin
+ Rupesh   | Content Writer
+ Nabin    | Receptionist
+ Krishna  | Receptionist
+(4 rows)

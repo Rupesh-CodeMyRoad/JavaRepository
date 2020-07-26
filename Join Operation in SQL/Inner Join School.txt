@@ -1,0 +1,60 @@
+postgres=# create database school;
+CREATE DATABASE
+postgres=# \c school
+You are now connected to database "school" as user "postgres".
+
+school=# create table Teacher(id serial primary key,name varchar(30),address varchar(30),salary int,teacher_type int);
+CREATE TABLE
+                                                           ^
+school=# insert into Teacher(name,address,salary,teacher_type) values('Rupesh','Baneshowr',100000,1);
+INSERT 0 1
+school=# insert into Teacher(name,address,salary,teacher_type) values('Nabin','Tinkune',90000,2);
+INSERT 0 1
+school=# insert into Teacher(name,address,salary,teacher_type) values('Hari','Sanepa',20000,3);
+INSERT 0 1
+school=# insert into Teacher(name,address,salary,teacher_type) values('Gita','Bktpur',200000,1);
+INSERT 0 1
+school=# insert into Teacher(name,address,salary,teacher_type) values('Ramita','Lalitpur',20000,2);
+INSERT 0 1
+school=# create table teacher_type(id int,type_name varchar(30));
+CREATE TABLE
+school=# insert into teacher_type values(1,'A'),(2,'B'),(3,'C');
+INSERT 0 3
+school=# select * from Teacher;
+ id |  name  |  address  | salary | teacher_type
+----+--------+-----------+--------+--------------
+  1 | Rupesh | Baneshowr | 100000 |            1
+  2 | Nabin  | Tinkune   |  90000 |            2
+  3 | Hari   | Sanepa    |  20000 |            3
+  4 | Gita   | Bktpur    | 200000 |            1
+  5 | Ramita | Lalitpur  |  20000 |            2
+(5 rows)
+
+school=# select * from teacher_type;
+ id | type_name
+----+-----------
+  1 | A
+  2 | B
+  3 | C
+(3 rows)
+
+school=# select * from Teacher t INNER JOIN teacher_type tt on t.teacher_Type=tt.id;
+ id |  name  |  address  | salary | teacher_type | id | type_name
+----+--------+-----------+--------+--------------+----+-----------
+  4 | Gita   | Bktpur    | 200000 |            1 |  1 | A
+  1 | Rupesh | Baneshowr | 100000 |            1 |  1 | A
+  5 | Ramita | Lalitpur  |  20000 |            2 |  2 | B
+  2 | Nabin  | Tinkune   |  90000 |            2 |  2 | B
+  3 | Hari   | Sanepa    |  20000 |            3 |  3 | C
+(5 rows)
+
+
+school=# select t.name,t.address,t.salary,tt.Type_Name from Teacher t INNER JOIN teacher_type tt on t.teacher_type=tt.id;
+  name  |  address  | salary | type_name
+--------+-----------+--------+-----------
+ Gita   | Bktpur    | 200000 | A
+ Rupesh | Baneshowr | 100000 | A
+ Ramita | Lalitpur  |  20000 | B
+ Nabin  | Tinkune   |  90000 | B
+ Hari   | Sanepa    |  20000 | C
+(5 rows)

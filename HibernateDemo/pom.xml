@@ -8,7 +8,7 @@
     <artifactId>HibernateDemo</artifactId>
     <version>1.0-SNAPSHOT</version>
     <properties>
-        <hibernate.version>5.4.10.Final</hibernate.version>
+        <hibernate.version>5.4.24.Final</hibernate.version>
         <lombok.version>1.18.10</lombok.version>
     </properties>
 
